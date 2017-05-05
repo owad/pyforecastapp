@@ -1,19 +1,18 @@
 from __future__ import print_function
 import json
-# import re
 
 
 from google.appengine.api import urlfetch
 
 
 class ForecastApp(object):
-    def __init__(self, account_id, email, password, protocol="https",
+    def __init__(self, account_id, protocol="https",
                  host="api.forecastapp.com"):
         self.protocol = protocol
         self.host = host
         self.account_id = account_id
 
-        self.auth_token = None  # self._authenticate(email, password, account_id)
+        self.auth_token = None
 
     def projects(self):
         return self._call('/projects')['projects']
@@ -39,25 +38,3 @@ class ForecastApp(object):
             headers=headers,
         )
         return json.loads(req.content)
-
-    # def _authenticate(self, email, password, account_id):
-    #     with requests.Session() as s:
-    #         try:
-    #             form_request = s.get('https://id.getharvest.com/forecast/sign_in')
-    #             csrf_token = re.search('name="authenticity_token" value="(.*)"', form_request.text).group(1)
-    #         except:
-    #             print("Error authenticating, could not find csrf token")
-    #             raise
-    #
-    #         data = {'authenticity_token': csrf_token,
-    #                 'email': email,
-    #                 'password': password,
-    #                 'product': 'forecast'}
-    #
-    #         try:
-    #             login_request = s.post('https://id.getharvest.com/sessions', data=data, allow_redirects=True)
-    #             token_request = s.get('https://id.getharvest.com/accounts/%s' % account_id)
-    #             return token_request.url.split('/')[-1]
-    #         except:
-    #             print("Error authenticating, could not find authentication token")
-    #             raise
