@@ -1,5 +1,6 @@
 from __future__ import print_function
 import json
+import logging
 
 
 from google.appengine.api import urlfetch
@@ -33,8 +34,13 @@ class ForecastApp(object):
         headers = {'Authorization': 'Bearer %s' % self.auth_token,
                    'Forecast-Account-ID': '%s' % self.account_id}
 
-        req = urlfetch.fetch(
-            '%s://%s%s' % (self.protocol, self.host, url),
+        url = '%s://%s%s' % (self.protocol, self.host, url)
+        res = urlfetch.fetch(
+            url,
             headers=headers,
         )
-        return json.loads(req.content)
+
+        logging.debug("URL: {}".format(url))
+        logging.debug("Status Code: {}".format(res.status_code))
+
+        return json.loads(res.content)
